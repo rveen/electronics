@@ -15,11 +15,13 @@ func Rth(pkg string) float64 {
 	switch pkg {
 	case "0201":
 		return 800
+	case "0402":
+		return 500 // TBD
 	case "0603":
 		return 400
 	case "0805":
 		return 250
-	case "1206":
+	case "1206", "0612": // TBD
 		return 200
 	case "1210":
 		return 125

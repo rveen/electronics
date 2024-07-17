@@ -7,30 +7,32 @@ import (
 // Rth returns the default thermal resistance of the component (to ambient) based
 // on the package.
 // Source:
-// - http://www.yageo.com/exep/pages/download/literatures/PYu-R_Mount_7.pdf
+// - https://www.vishay.com/docs/53048/pprachp.pdf
 func Rth(pkg string) float64 {
 
 	pkg = strings.ToLower(pkg)
 
 	switch pkg {
 	case "0201":
-		return 800
+		return 1000   // To be confirmed
 	case "0402":
-		return 500 // TBD
+		return 870		
 	case "0603":
-		return 400
+		return 550
+	case "0612":
+		return 220	// TBC
 	case "0805":
-		return 250
-	case "1206", "0612": // TBD
-		return 200
+		return 440
+	case "1206":
+		return 220
 	case "1210":
-		return 125
+		return 140
 	case "1218":
-		return 100
+		return 125    // TBC
 	case "2010":
-		return 80
+		return 110
 	case "2512":
-		return 50
+		return 50  	// TBD
 	}
 
 	if strings.HasPrefix(pkg, "sot23") {

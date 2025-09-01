@@ -1,16 +1,6 @@
 package isolation
 
-/*
-
-Definitions
-
-Overvoltage category:
-  1: not connected to mains
-  2: appliances
-  3: permanently connected eq. or high reliability required
-  4: directly connected (meters, etc)
-
-*/
+/* Based on EVS-EN IEC 60664-1:2020+A1:2025 */
 
 import (
 	"golib/mathx"
@@ -72,7 +62,7 @@ func RatedImpulseVoltage(v float64, ovc int) float64 {
 	return riv[ovc-1]
 }
 
-// Table F.2 (heterogeneous)
+// Tables F.2, F.8, F.9 (heterogeneous)
 
 var (
 	f2v []float64 = []float64{330, 400, 500, 600, 800, 1000, 1200, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 8000, 10000, 12000, 15000, 20000, 25000, 30000, 40000, 50000}

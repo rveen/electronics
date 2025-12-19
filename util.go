@@ -1,18 +1,18 @@
 package electronics
 
 import (
-	"strconv"
 	"math"
+	"strconv"
 	"strings"
 )
 
 func Values(s string) []float64 {
 
-	ss := strings.Fields(s) 
+	ss := strings.Fields(s)
 	var ff []float64
 
-	for _,s := range ss {
-		ff = append(ff,Value(s))
+	for _, s := range ss {
+		ff = append(ff, Value(s))
 	}
 	return ff
 }
@@ -59,29 +59,30 @@ func Value(s string) float64 {
 
 	n1 = n1 + n2/10.0
 
+	if len(k) == 0 {
+		return n1
+	}
+
 	ks := string(k)
 
-	switch ks {
-	case "k":
+	if ks == "meg" {
+		return n1 * 1e6
+	}
+
+	switch k[0] {
+	case 'k':
 		return n1 * 1e3
-	case "m":
+	case 'm':
+		// TODO this should return n1*1e-3
 		return n1 * 1e6
-	case "meg":
-		return n1 * 1e6
-	case "":
-		return n1
-	case "u":
-		fallthrough
-	case "uf":
+	case 'u', 'µ':
 		return n1 * 1e-6
-	case "n":
-		fallthrough
-	case "nf":
+	case 'n':
 		return n1 * 1e-9
-	case "p":
-		fallthrough
-	case "pf":
+	case 'p':
 		return n1 * 1e-12
+	case 'f':
+		return n1 * 1e-15
 	default:
 		return n1
 	}

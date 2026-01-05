@@ -13,9 +13,10 @@ Overvoltage category:
 */
 
 import (
-	"golib/mathx"
 	"log"
 	"math"
+
+	"github.com/rveen/golib/mathx"
 )
 
 var riv []float64 = []float64{330, 500, 800, 1500, 2500, 4000, 6000, 8000, 12000, 15000}

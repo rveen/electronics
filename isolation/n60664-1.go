@@ -14,8 +14,12 @@ func (f Isolation) RatedImpulseVoltage(v float64, ovc int) float64 {
 	return RatedImpulseVoltage(v, ovc)
 }
 
-func (f Isolation) Clearance(typ string, volt, alt float64, pollution int, reinforced bool) float64 {
-	return math.Round(Clearance(typ, volt, alt, pollution, reinforced)*100) / 100
+func (f Isolation) Clearance(typ string, volt, alt float64, pollution int, reinforced bool, freq float64) float64 {
+	if freq <= 30000 {
+		return math.Round(Clearance(typ, volt, alt, pollution, reinforced)*100) / 100
+	} else {
+		return ClearanceInhomogenuousHF(volt) * AltitudeFactor(alt)
+	}
 }
 
 func (f Isolation) Creepage(v float64, pollution int, material string, reinforced bool) float64 {

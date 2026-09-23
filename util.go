@@ -57,7 +57,8 @@ func Value(s string) float64 {
 		n2, _ = strconv.ParseFloat(string(v2), 64)
 	}
 
-	n1 = n1 + n2/10.0
+	// 4k7 notation: the digits after the multiplier are the fraction
+	n1 = n1 + n2/math.Pow10(len(v2))
 
 	if len(k) == 0 {
 		return n1

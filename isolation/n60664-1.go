@@ -3,7 +3,6 @@ package isolation
 /* Based on EVS-EN IEC 60664-1:2020+A1:2025 */
 
 import (
-	"log"
 	"math"
 
 	"github.com/rveen/golib/mathx"
@@ -16,15 +15,22 @@ func (f Isolation) RatedImpulseVoltage(v float64, ovc int) float64 {
 }
 
 func (f Isolation) Clearance(typ string, volt, alt float64, pollution int, reinforced bool, freq float64) float64 {
-	if freq <= 30000 {
-		return math.Round(Clearance(typ, volt, alt, pollution, reinforced)*100) / 100
-	} else {
-		return ClearanceInhomogenuousHF(volt) * AltitudeFactor(alt)
+	return math.Round(Clearance(typ, volt, alt, pollution, reinforced)*100) / 100
+}
+
+func (f Isolation) ClearanceHF(typ string, volt, alt float64, pollution int, reinforced bool, freq float64) float64 {
+	if reinforced {
+		volt *= 1.6
 	}
+	return ClearanceInhomogenuousHF(volt) * AltitudeFactor(alt)
 }
 
 func (f Isolation) Creepage(v float64, pollution int, material string, reinforced bool) float64 {
 	return Creepage(v, pollution, material, reinforced)
+}
+
+func (f Isolation) CreepageHF(v, freq float64, pollution int, reinforced bool) float64 {
+	return CreepageHF(v, freq, pollution, reinforced)
 }
 
 func (f Isolation) CreepagePcb(v float64, pollution int, reinforced bool) float64 {
@@ -80,8 +86,6 @@ var (
 // typ:
 // p (pulse, 1.25/50 us) = ambient peaks, h (long, hi-pot) = peaks are part of the signal, d (long, avoid partial discharge)
 func Clearance(typ string, volt, altitude float64, pollution int, reinforced bool) float64 {
-
-	log.Printf("typ %s volt %f alt %f pol %d reinf %T\n", typ, volt, altitude, pollution, reinforced)
 
 	if reinforced {
 		volt *= 1.6

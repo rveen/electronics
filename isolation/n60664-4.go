@@ -3,7 +3,6 @@ package isolation
 
 import (
 	"errors"
-	"log"
 	"math"
 )
 

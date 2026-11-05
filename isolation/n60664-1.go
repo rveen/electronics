@@ -3,7 +3,9 @@ package isolation
 /* Based on EVS-EN IEC 60664-1:2020+A1:2025 */
 
 import (
+	"log"
 	"math"
+	"sort"
 
 	"github.com/rveen/golib/mathx"
 )
@@ -15,6 +17,8 @@ func (f Isolation) RatedImpulseVoltage(v float64, ovc int) float64 {
 }
 
 func (f Isolation) Clearance(typ string, volt, alt float64, pollution int, reinforced bool, freq float64) float64 {
+	log.Printf("----> Clearance: %s, %f, %f, %d, %t, %f\n", typ, volt, alt, pollution, reinforced, freq)
+	log.Printf("---->   %f\n", Clearance(typ, volt, alt, pollution, reinforced))
 	return math.Round(Clearance(typ, volt, alt, pollution, reinforced)*100) / 100
 }
 
@@ -103,11 +107,13 @@ func Clearance(typ string, volt, altitude float64, pollution int, reinforced boo
 		return -1
 	}
 
-	// pulse (impulse)
-	c := mathx.Interpolate(volt, f2v, f2c)
-	if math.IsNaN(c) {
-		return c
+	// pulse (impulse): no interpolation, take the next higher (or equal)
+	// voltage from Table F.2
+	i := sort.SearchFloat64s(f2v, volt)
+	if i >= len(f2v) || math.IsNaN(volt) {
+		return math.NaN()
 	}
+	c := f2c[i]
 
 	switch pollution {
 	case 4:
